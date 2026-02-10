@@ -1,0 +1,19 @@
+{
+  "name": "Urban Harvest Hub",
+  "short_name": "Urban Harvest",
+  "description": "Eco-conscious community: workshops, events, sustainable products",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#2E8B57",
+  "theme_color": "#2E8B57",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "sustainability", "shopping"]
+}

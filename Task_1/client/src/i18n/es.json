@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "workshops": "Talleres",
+    "events": "Eventos",
+    "products": "Productos",
+    "bookNow": "Reservar",
+    "admin": "Admin",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar sesión",
+    "myBookings": "Mis reservas",
+    "mySubscriptions": "Mis suscripciones"
+  },
+  "home": {
+    "title": "Crece, aprende y conéctate de forma sostenible",
+    "subtitle": "Únete a nuestra comunidad ecológica: talleres, productos y eventos que marcan la diferencia.",
+    "getStarted": "Empezar",
+    "realTimeEcoData": "Datos ecológicos en tiempo real",
+    "browseByCategory": "Explorar por categoría",
+    "all": "Todos",
+    "workshop": "Taller",
+    "product": "Producto",
+    "event": "Evento",
+    "allActivities": "Todas las actividades",
+    "items": "elementos",
+    "readyToMakeDifference": "¿Listo para marcar la diferencia?",
+    "readySubtext": "Únete a nuestra comunidad y participa en talleres, compra productos sostenibles y asiste a eventos que ayudan al planeta.",
+    "exploreWorkshops": "Explorar talleres",
+    "shopProducts": "Comprar productos"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "username": "Usuario",
+    "fullName": "Nombre completo",
+    "loginSuccess": "Sesión iniciada",
+    "registerSuccess": "Registro completado",
+    "invalidCredentials": "Usuario o contraseña incorrectos"
+  },
+  "admin": {
+    "title": "Panel de administración",
+    "events": "Eventos",
+    "workshops": "Talleres",
+    "products": "Productos",
+    "add": "Añadir",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirmDelete": "¿Seguro que quieres eliminar esto?"
+  },
+  "reviews": {
+    "title": "Opiniones",
+    "leaveReview": "Dejar una opinión",
+    "rating": "Valoración",
+    "comment": "Comentario",
+    "submit": "Enviar"
+  },
+  "subscriptions": {
+    "title": "Suscripciones a productos",
+    "subscribe": "Suscribirse a la caja",
+    "frequency": "Frecuencia",
+    "weekly": "Semanal",
+    "biweekly": "Quincenal",
+    "monthly": "Mensual",
+    "quantity": "Cantidad"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "close": "Cerrar"
+  },
+  "a11y": {
+    "skipToContent": "Saltar al contenido principal",
+    "mainContent": "Contenido principal"
+  }
+}

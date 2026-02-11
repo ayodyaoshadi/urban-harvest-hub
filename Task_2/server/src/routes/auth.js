@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { getDb } from '../db/database.js';
 import { body, validationResult } from 'express-validator';
 import { signToken } from '../utils/jwt.js';
-import { requireAuth, requireAdmin } from '../middleware/auth.js';
+import { requireAuth } from '../middleware/auth.js';
 
 const router = Router();
 const SALT_ROUNDS = 10;
@@ -135,8 +135,8 @@ router.get('/me', requireAuth, async (req, res, next) => {
   }
 });
 
-// GET /api/auth/users – list all users (admin only; no password_hash)
-router.get('/users', requireAdmin, async (req, res, next) => {
+// GET /api/auth/users – list all users (no password_hash), e.g. for Postman/admin
+router.get('/users', async (req, res, next) => {
   try {
     const db = getDb();
     const [rows] = await db.execute(

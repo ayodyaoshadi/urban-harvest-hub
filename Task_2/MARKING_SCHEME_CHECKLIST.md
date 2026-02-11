@@ -105,7 +105,7 @@ This checklist maps the implementation to the official marking criteria and **de
 
 | Evidence | Location |
 |----------|----------|
-| **Database** | SQLite via `better-sqlite3` – `Task 2/server/src/db/database.js`, file at `server/data/urban_harvest.db` |
+| **Database** | MySQL via `mysql2` – `Task 2/server/src/db/database.js` |
 | **Structured data / schema** | `Task 2/server/src/db/schema.sql` – tables: workshops, events, products, bookings; appropriate columns and types |
 | **Store / retrieve (CRUD)** | INSERT in POST routes; SELECT in GET routes; UPDATE/DELETE in PUT/DELETE routes; parameterized queries |
 | **Efficient queries & indexing** | Single-table SELECTs with optional filters (category, search, upcoming); primary key indexing for GET by id |

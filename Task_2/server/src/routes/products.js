@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { getDb } from '../db/database.js';
 import { productValidators, handleValidationErrors } from '../middleware/validation.js';
-import { requireAdmin } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -42,7 +41,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', requireAdmin, productValidators.create, handleValidationErrors, async (req, res, next) => {
+router.post('/', productValidators.create, handleValidationErrors, async (req, res, next) => {
   try {
     const db = getDb();
     const b = req.body;
@@ -70,7 +69,7 @@ router.post('/', requireAdmin, productValidators.create, handleValidationErrors,
   }
 });
 
-router.put('/:id', requireAdmin, productValidators.update, handleValidationErrors, async (req, res, next) => {
+router.put('/:id', productValidators.update, handleValidationErrors, async (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     const db = getDb();
@@ -99,7 +98,7 @@ router.put('/:id', requireAdmin, productValidators.update, handleValidationError
   }
 });
 
-router.delete('/:id', requireAdmin, async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (Number.isNaN(id)) return res.status(400).json({ error: true, message: 'Invalid id' });

@@ -303,10 +303,5 @@ Commit and push; Render will redeploy automatically.
 
   Then run the seed (e.g. `npm run seed` in `Task_2/server` with the same env vars) so workshops (and events/products) get sample data.
 
-- **Login returns 401 on the live (Vercel) site**  
-  The live site uses **Railway’s** database. The user you created locally (e.g. in XAMPP) is not in Railway. Either **register** on the live site (Register → then Login), or add the same user to Railway by running from `Task_2/server` (with Railway `MYSQL_*` vars set):  
-  `node src/scripts/seed-user-ayodya.js`  
-  That creates user `ayodya` / password `ayodyapass` in Railway so you can log in on the live site.
-
 - **Render free tier sleeps**  
   The first request after idle can be slow; that’s normal. Lighthouse may need a warm request before running.

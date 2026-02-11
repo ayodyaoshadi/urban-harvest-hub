@@ -18,16 +18,3 @@ export function requireAuth(req, res, next) {
     return res.status(401).json({ error: true, message: 'Invalid or expired token' });
   }
 }
-
-/**
- * Requires authentication and role === 'admin'. Use for admin-only routes
- * (e.g. create/update/delete workshops, events, products; list all users).
- */
-export function requireAdmin(req, res, next) {
-  requireAuth(req, res, () => {
-    if (req.user?.role !== 'admin') {
-      return res.status(403).json({ error: true, message: 'Admin access required' });
-    }
-    next();
-  });
-}

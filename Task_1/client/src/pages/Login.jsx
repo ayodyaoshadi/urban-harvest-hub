@@ -34,7 +34,8 @@ function Login() {
         navigate(from || '/', { replace: true });
       }
     } catch (err) {
-      const msg = err.message || t('auth.invalidCredentials');
+      const apiMessage = err.response?.data?.message;
+      const msg = apiMessage || err.message || t('auth.invalidCredentials');
       const isUnreachable = !err.response && (msg.includes('Network') || msg.includes('fetch') || msg === 'Server error occurred');
       setError(isUnreachable ? t('auth.apiRequired') : msg);
     } finally {

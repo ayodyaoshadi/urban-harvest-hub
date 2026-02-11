@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db/database.js';
 import { eventValidators, handleValidationErrors } from '../middleware/validation.js';
+import { requireAdmin } from '../middleware/auth.js';
 import { formatDateFields } from '../utils/dateFormat.js';
 
 const router = Router();
@@ -39,7 +40,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', eventValidators.create, handleValidationErrors, async (req, res, next) => {
+router.post('/', requireAdmin, eventValidators.create, handleValidationErrors, async (req, res, next) => {
   try {
     const db = getDb();
     const b = req.body;
@@ -69,7 +70,7 @@ router.post('/', eventValidators.create, handleValidationErrors, async (req, res
   }
 });
 
-router.put('/:id', eventValidators.update, handleValidationErrors, async (req, res, next) => {
+router.put('/:id', requireAdmin, eventValidators.update, handleValidationErrors, async (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     const db = getDb();
@@ -98,7 +99,7 @@ router.put('/:id', eventValidators.update, handleValidationErrors, async (req, r
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', requireAdmin, async (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (Number.isNaN(id)) return res.status(400).json({ error: true, message: 'Invalid id' });

@@ -41,6 +41,10 @@ export async function initSchema() {
     .map((s) => s.trim())
     .filter((s) => s.length > 0 && s.startsWith('CREATE TABLE'));
   for (const stmt of statements) {
-    await pool.execute(stmt + ';');
+    try {
+      await pool.execute(stmt + ';');
+    } catch (err) {
+      console.error('initSchema: failed to run statement:', stmt.slice(0, 80) + '...', err.message);
+    }
   }
 }

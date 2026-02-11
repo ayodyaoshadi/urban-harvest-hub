@@ -30,7 +30,8 @@ function Register() {
       await register(form);
       navigate('/');
     } catch (err) {
-      const msg = err.message || 'Registration failed';
+      const apiMessage = err.response?.data?.message;
+      const msg = apiMessage || err.message || 'Registration failed';
       const isUnreachable = !err.response && (msg.includes('Network') || msg.includes('fetch') || msg === 'Server error occurred');
       setError(isUnreachable ? t('auth.apiRequired') : msg);
     } finally {

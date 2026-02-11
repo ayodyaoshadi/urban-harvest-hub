@@ -1,15 +1,20 @@
 # Deploy Urban Harvest Hub from Scratch (Step-by-Step)
 
-This guide gets the **React PWA** (Task 1) and **Express API + MySQL** (Task 2) online using free tiers: **GitHub**, **PlanetScale** (MySQL), **Render** (API), and **Vercel** (frontend).
+This guide gets the **React PWA** (Task 1) and **Express API + MySQL** (Task 2) online. Options:
+
+- **Free path:** GitHub + **Railway** (API + MySQL, free $5/month credit) + **Vercel** (frontend), or **Render** (API) + a free MySQL host (see Step 2).
+- **Paid path:** **PlanetScale** (MySQL, from ~$15/mo) + **Render** (API) + **Vercel** (frontend).
 
 ---
 
 ## What you’ll need
 
 - A **GitHub** account  
-- A **Render** account (render.com)  
-- A **Vercel** account (vercel.com)  
-- A **PlanetScale** account (planetscale.com) — for free MySQL  
+- **Vercel** (vercel.com) — frontend, free  
+- For API + database, choose one:
+  - **Railway** (railway.app) — free $5/month credit; run API + MySQL in one place (easiest free option), or  
+  - **Render** (render.com) for API + a **free MySQL** host (e.g. db4free.net), or  
+  - **PlanetScale** (planetscale.com) — paid MySQL from ~$15/mo  
 
 ---
 
@@ -57,43 +62,37 @@ After this, your code should be on GitHub.
 
 ---
 
-## Step 2: Create a MySQL database (PlanetScale)
+## Step 2: Create a MySQL database (free options)
 
-Your API needs a MySQL database. PlanetScale’s free tier works with your existing code.
+Your API needs a MySQL database that’s reachable from the internet. **PlanetScale no longer has a free plan** (paid from ~$15/mo). Use one of these free options instead.
 
-### 2.1 Sign up and create a database
+### Option A: Railway (API + MySQL together — recommended free path)
 
-1. Go to [planetscale.com](https://planetscale.com) and sign up (GitHub login is fine).  
-2. Click **Create a database**.  
-3. **Name:** e.g. `urban-harvest-hub`.  
-4. **Region:** pick one near you (or near Render’s region).  
-5. **Plan:** Free.  
-6. Click **Create database**.
+1. Go to [railway.app](https://railway.app) and sign in with GitHub.  
+2. **New project** → **Deploy from GitHub** → select your `urban-harvest-hub` repo.  
+3. Add a **MySQL** plugin: in the project, click **+ New** → **Database** → **MySQL**. Railway creates a MySQL instance and gives you env vars.  
+4. Add your **API service**: **+ New** → **GitHub Repo** → same repo. Set **Root directory** to `Task_2/server`. Set **Start command** to `npm start`; build runs `npm install`.  
+5. In the API service, go to **Variables** and add (Railway often injects `MYSQL_URL` or separate vars from the MySQL plugin — use those). If you get separate vars, add: `MYSQL_HOST`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE`, and set `JWT_SECRET` to a long random string.  
+6. Deploy. Open the API service → **Settings** → **Generate domain** to get a URL like `https://your-api.up.railway.app`. Your API base for the frontend is that URL **+ `/api`**.  
+7. Run schema + seed once: from your PC, set the same MySQL env vars (copy from Railway’s MySQL service variables) and run `cd Task_2/server` then `npm run seed` (and ensure schema runs — your app runs `initSchema()` on start, so tables may already exist; if not, run the SQL from `schema-mysql.sql` in Railway’s MySQL console or via a one-off command).  
+8. **Skip Step 3 (Render)** and go to **Step 4 (Vercel)** using your Railway API URL.
 
-### 2.2 Get connection details
+### Option B: Free MySQL host (e.g. db4free.net) + Render for API
 
-1. Open your new database.  
-2. Click **Connect** (or **Connect with**).  
-3. Choose **Connect with: General** (or **MySQL**).  
-4. Copy or note:
-   - **Host**  
-   - **Username**  
-   - **Password** (click “Show” and copy; you may only see it once).  
-   - **Database name** (often same as the DB name you chose).
+1. Sign up at [db4free.net](https://www.db4free.net) (or another free MySQL host). Create a database and user; note **host**, **username**, **password**, and **database name**.  
+2. Run your schema: use the host’s phpMyAdmin or MySQL client to execute the contents of `Task_2/server/src/db/schema-mysql.sql`. Optionally run the seed script locally with these env vars to insert sample data.  
+3. In **Step 3 (Render)**, when you add environment variables to the API, set `MYSQL_HOST`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE`. Do **not** set `MYSQL_SSL=true` unless the host requires SSL.  
+4. Continue with Step 3 (Render) and Step 4 (Vercel) as in the guide.
 
-You’ll use these in Step 4 for the API.
+### Option C: PlanetScale (paid)
 
-### 2.3 Run the schema and seed (one-time)
-
-1. In PlanetScale, open the **Console** tab (or **Branches** → your branch → **Console**).  
-2. Copy the contents of **`Task_2/server/src/db/schema-mysql.sql`** from your project and run it in the Console (run each `CREATE TABLE` statement if needed).  
-3. To add sample data, you can either:
-   - Run the INSERTs from your seed logic manually in the Console, or  
-   - After the API is deployed (Step 4), run the seed script **once** from your PC with env vars pointing to PlanetScale (see Step 4.4).
+If you prefer PlanetScale (paid from ~$15/mo): create a database, choose **Vitess** (MySQL-compatible) if offered, get connection details from **Connect**, set `MYSQL_SSL=true` in the API env vars, and run the schema in PlanetScale’s console. Then follow Step 3 (Render) and Step 4 (Vercel).
 
 ---
 
 ## Step 3: Deploy the API on Render
+
+**If you used Railway (Step 2 Option A), you already have the API deployed — skip to Step 4** and use your Railway API URL as `VITE_API_URL`.
 
 ### 3.1 Create a Web Service
 
@@ -266,6 +265,48 @@ Commit and push; Render will redeploy automatically.
 
 - **Database empty (no workshops/events/products)**  
   Run the seed (Step 3.5) or run the INSERTs from the seed script in PlanetScale Console.
+
+- **`Table 'railway.workshops' doesn't exist`**  
+  The app creates tables on startup; if `workshops` is missing, create it manually.
+
+  **Option A – Run from your PC (recommended if Railway’s Database tab is stuck “Attempting to connect…”):**  
+  From `Task_2/server`, set the same `MYSQL_*` variables you use for Railway, then run:
+
+  ```powershell
+  $env:MYSQL_HOST="YOUR_RAILWAY_HOST"; $env:MYSQL_PORT="YOUR_PORT"; $env:MYSQL_USER="root"; $env:MYSQL_PASSWORD="YOUR_PASSWORD"; $env:MYSQL_DATABASE="railway"; node src/scripts/create-workshops-table.js
+  ```
+
+  Replace the placeholders with values from Railway → MySQL service → **Variables**. The script creates the `workshops` table and exits.
+
+  **Option B – Railway UI or MySQL client:**  
+  In **Railway** → MySQL service → **Database** tab (or any MySQL client with the same `MYSQL_*` vars), run:
+
+  ```sql
+  CREATE TABLE IF NOT EXISTS workshops (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(200) NOT NULL,
+    description TEXT NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    duration_hours DECIMAL(4,2) DEFAULT 2.0,
+    price DECIMAL(10,2) NOT NULL,
+    category VARCHAR(50),
+    max_participants INT DEFAULT 20,
+    current_participants INT DEFAULT 0,
+    location VARCHAR(200),
+    instructor_name VARCHAR(100),
+    image_url VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  );
+  ```
+
+  Then run the seed (e.g. `npm run seed` in `Task_2/server` with the same env vars) so workshops (and events/products) get sample data.
+
+- **Login returns 401 on the live (Vercel) site**  
+  The live site uses **Railway’s** database. The user you created locally (e.g. in XAMPP) is not in Railway. Either **register** on the live site (Register → then Login), or add the same user to Railway by running from `Task_2/server` (with Railway `MYSQL_*` vars set):  
+  `node src/scripts/seed-user-ayodya.js`  
+  That creates user `ayodya` / password `ayodyapass` in Railway so you can log in on the live site.
 
 - **Render free tier sleeps**  
   The first request after idle can be slow; that’s normal. Lighthouse may need a warm request before running.
